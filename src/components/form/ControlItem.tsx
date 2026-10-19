@@ -42,7 +42,7 @@ export function ControlItem({
       {showLabel && (
         <label className="cf-form-label">
           {control.required && <span className="cf-required">*</span>}
-          {control.nameZh}
+          {control.nameZh}：
         </label>
       )}
       <div className={showLabel ? 'cf-form-control' : 'cf-form-control-full'}>

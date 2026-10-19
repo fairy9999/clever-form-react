@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { App, Button, Space, Spin, Tag, Typography } from 'antd';
-import { ArrowLeftOutlined, CheckOutlined, SaveOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons';
 import {
   getControlsTree,
   getEntity,
@@ -243,7 +243,7 @@ export function FormPage({ mode }: FormPageProps) {
       session.setFormDataMapBatch(nextBatch);
       session.setDataByFormId(activeFormId, JSON.parse(JSON.stringify(formData)));
       setRuleFormData((prev) => ({ ...prev, [activeFormId]: JSON.parse(JSON.stringify(formData)) }));
-      message.success(isComplete ? '已提交完成' : '草稿已保存');
+      message.success('保存成功');
     } catch (err) {
       message.error(err instanceof Error ? err.message : '保存失败');
     } finally {
@@ -272,7 +272,8 @@ export function FormPage({ mode }: FormPageProps) {
   if (!entity) {
     return (
       <div className="cf-center">
-        <Spin tip="加载中..." />
+        <Spin />
+        <span className="cf-muted" style={{ marginLeft: 12 }}>加载中...</span>
       </div>
     );
   }
@@ -284,9 +285,6 @@ export function FormPage({ mode }: FormPageProps) {
           <Button icon={<ArrowLeftOutlined />} onClick={() => navigate(-1)} />
           <Typography.Title level={3} style={{ margin: 0 }}>
             {entity.entityName}
-            <Tag style={{ marginLeft: 10 }} color={viewOnly ? 'default' : 'processing'}>
-              {viewOnly ? '详情查看' : '数据填报'}
-            </Tag>
           </Typography.Title>
         </Space>
         <Typography.Text type="secondary">
@@ -313,12 +311,10 @@ export function FormPage({ mode }: FormPageProps) {
                     onClick={() => form.enabled && setActiveFormId(form.formId)}
                     disabled={!form.enabled}
                   >
+                    <span className={`cf-status-dot status-${status}`} />
                     <span className="cf-menu-item-name" title={form.formDesc ?? form.formName}>
                       {form.formName}
                     </span>
-                    <Tag color={statusColor(status)} style={{ marginRight: 0 }}>
-                      {statusText(status)}
-                    </Tag>
                   </button>
                 );
               })}
@@ -341,14 +337,14 @@ export function FormPage({ mode }: FormPageProps) {
                   </Tag>
                 </Typography.Title>
                 {!viewOnly && (
-                  <Space>
-                    <Button icon={<SaveOutlined />} loading={saving} onClick={() => handleSave(false)}>
-                      保存草稿
-                    </Button>
-                    <Button type="primary" icon={<CheckOutlined />} loading={saving} onClick={() => handleSave(true)}>
-                      完成提交
-                    </Button>
-                  </Space>
+                  <Button
+                    type="primary"
+                    icon={<CheckOutlined />}
+                    loading={saving}
+                    onClick={() => handleSave(true)}
+                  >
+                    保存
+                  </Button>
                 )}
               </div>
               {activeForm.formDesc && <p className="cf-panel-desc">{activeForm.formDesc}</p>}
@@ -360,11 +356,6 @@ export function FormPage({ mode }: FormPageProps) {
                 errors={errors}
                 onChange={setFormData}
               />
-              {meta?.syncFromEntity && meta.syncFromEntity.length > 0 && (
-                <p className="cf-panel-desc" style={{ marginTop: 16 }}>
-                  提示：本表单配置了实体数据同步（{meta.syncFromEntity.length} 项），空字段将在首次进入时自动回填。
-                </p>
-              )}
             </>
           )}
         </main>

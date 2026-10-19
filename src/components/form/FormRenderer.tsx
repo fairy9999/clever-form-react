@@ -8,6 +8,7 @@ import {
   type VisibilityContext,
 } from '@/utils/visibility';
 import { applyHiddenClears } from '@/utils/clear';
+import { parsePrivateAttr } from '@/utils/privateAttr';
 import { computeCountable } from '@/components/controls/CountableControl';
 import { ControlItem } from './ControlItem';
 import { GroupBoxRenderer } from './GroupBoxRenderer';
@@ -58,7 +59,11 @@ export function FormRenderer({ controls, value, ruleFormData, viewOnly, errors, 
     const set = new Set<string>();
     const walk = (list: ControlDef[]) => {
       for (const c of list) {
-        if (c.selectedControlType === 'group-box') continue;
+        if (c.selectedControlType === 'group-box') {
+          // 动态复制组子控件随记录克隆渲染，不按顶层规则评估；静态分组需深入子控件
+          if (!parsePrivateAttr(c).allowDynamicAdd) walk(c.children ?? []);
+          continue;
+        }
         if (shouldShowControl(c, ctx)) set.add(c.identifier);
       }
     };
@@ -66,16 +71,37 @@ export function FormRenderer({ controls, value, ruleFormData, viewOnly, errors, 
     return set;
   }, [ctx]);
 
+  /** 动态复制组原始子控件 identifier：不参与渲染，也不参与隐藏清值 */
+  const dynamicChildIds = useMemo(() => {
+    const set = new Set<string>();
+    const walk = (list: ControlDef[]) => {
+      for (const c of list) {
+        if (c.selectedControlType !== 'group-box') continue;
+        if (parsePrivateAttr(c).allowDynamicAdd) {
+          for (const child of c.children ?? []) set.add(child.identifier);
+        } else {
+          walk(c.children ?? []);
+        }
+      }
+    };
+    walk(controls);
+    return set;
+  }, [controls]);
+
   const signature = useMemo(() => [...visibleIds].sort().join(','), [visibleIds]);
 
   // 隐藏控件自动清值（编辑态）；visibility 签名变化时执行一次
   useEffect(() => {
     if (viewOnly) return;
     const current = valueRef.current;
-    const next = applyHiddenClears(controls, current, (c) => visibleIds.has(c.identifier));
+    const next = applyHiddenClears(
+      controls,
+      current,
+      (c) => visibleIds.has(c.identifier) && !dynamicChildIds.has(c.identifier),
+    );
     if (next !== current) onChangeRef.current(next);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signature, viewOnly, controls]);
+  }, [signature, viewOnly, controls, dynamicChildIds]);
 
   const variables = useMemo(() => computeVariables(controls, value), [controls, value]);
 

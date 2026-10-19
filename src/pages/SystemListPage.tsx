@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, Col, Row, Spin, Tag, Typography } from 'antd';
+import { Button, Card, Col, Row, Spin, Typography } from 'antd';
 import { LogoutOutlined, ReloadOutlined } from '@ant-design/icons';
 import { getSystems } from '@/api';
 import { useAuthStore } from '@/store/authStore';
@@ -21,7 +21,9 @@ export function SystemListPage() {
   return (
     <div className="cf-page">
       <div className="cf-page-head">
-        <Typography.Title level={3}>演示系统列表</Typography.Title>
+        <Typography.Title level={3} style={{ margin: 0 }}>
+          系统列表
+        </Typography.Title>
         <div>
           <Button icon={<ReloadOutlined />} onClick={load} style={{ marginRight: 8 }}>
             刷新
@@ -36,15 +38,15 @@ export function SystemListPage() {
       ) : (
         <Row gutter={[16, 16]}>
           {systems.map((s) => (
-            <Col xs={24} md={12} key={s.systemId}>
+            <Col xs={24} md={12} xl={6} key={s.systemId}>
               <Card
                 hoverable
+                className="cf-system-card"
                 title={s.systemName}
-                extra={s.demoTag && <Tag color="blue">{s.demoTag}</Tag>}
                 onClick={() => navigate(`/systems/${s.systemId}/entities`)}
               >
-                <p className="cf-muted">{s.systemDesc}</p>
-                <p className="cf-muted">创建人：{s.creatorName} · {s.createDate}</p>
+                <p className="cf-card-line">创建者：{s.creatorName}</p>
+                <p className="cf-card-line">创建日期：{s.createDate}</p>
               </Card>
             </Col>
           ))}

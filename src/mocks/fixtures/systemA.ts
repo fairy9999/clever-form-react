@@ -1,5 +1,5 @@
 /**
- * 演示系统 A：示例·设备巡检管理系统（完全虚构）
+ * 演示系统 A：设备巡检管理系统（完全虚构）
  * 覆盖全部控件类型 + 静态分组 + 预设回填 + 实体数据同步 + 菜单显隐规则 + 附件上传。
  */
 import type { ControlDef } from '@/types/control';
@@ -16,7 +16,7 @@ const fa01: ControlDef[] = [
     colNumber: 12,
     privateAttr: pa({
       explanation:
-        '本表单演示全部基础控件类型：文本 / 多行文本 / 数值 / 带单位数值 / 下拉 / 单选 / 多选（互斥） / 级联 / 日期 / 时间 / 附件 / 说明文字 / 分组 / 预设回填。',
+        '本表单用于登记巡检基本信息，包含文本、数值、下拉、单选、多选、级联、日期、时间、附件、分组与预设回填控件。',
       bodyFontSize: 12,
       bodyFontColor: '#8c8c8c',
     }),
@@ -79,7 +79,7 @@ const fa01: ControlDef[] = [
   }),
   ctrl({
     identifier: 'check_items',
-    nameZh: '检查项（含互斥项）',
+    nameZh: '检查项',
     selectedControlType: 'checkbox',
     required: true,
     desc: '勾选“不详”后将自动取消其余选项',
@@ -186,7 +186,7 @@ const fa02: ControlDef[] = [
     nameZh: '外观检查结果',
     selectedControlType: 'radio',
     required: true,
-    desc: '选择“不合格”后，左侧菜单将出现“整改回执单”（菜单级显隐规则演示）',
+    desc: '选择“不合格”后，左侧菜单将出现“整改回执单”',
     privateAttr: pa({
       options: [
         { value: '1', label: '合格' },
@@ -208,7 +208,7 @@ const fa02: ControlDef[] = [
   }),
   ctrl({
     identifier: 'special_confirm',
-    nameZh: '复核结论（互斥演示）',
+    nameZh: '复核结论',
     selectedControlType: 'checkbox',
     desc: '“不详”与普通选项互斥',
     privateAttr: pa({
@@ -245,7 +245,7 @@ const fa02: ControlDef[] = [
     identifier: 'defect_grade',
     nameZh: '缺陷等级',
     selectedControlType: 'countable',
-    desc: '按总分自动评级（分段映射演示）',
+    desc: '按总分自动评级',
     privateAttr: pa({
       countableExpression: '[defect_total]',
       gradeMapping: [
@@ -293,7 +293,7 @@ const fa03: ControlDef[] = [
     identifier: 'exempt_no',
     nameZh: '豁免单编号',
     selectedControlType: 'input-text',
-    desc: '现场整改时自动隐藏（SKIP 规则演示）',
+    desc: '现场整改时自动隐藏',
     ruleType: 'SKIP',
     ruleList: [
       {
@@ -346,7 +346,7 @@ export const systemAForms = [
     formOrder: 1,
     enabled: true,
     formLayout: 'horizontal' as const,
-    formDesc: '覆盖全部基础控件类型',
+    formDesc: '巡检基本信息与现场情况记录',
     syncFromEntity: fa01Sync,
     tree: fa01,
   },
@@ -356,7 +356,7 @@ export const systemAForms = [
     formOrder: 2,
     enabled: true,
     formLayout: 'horizontal' as const,
-    formDesc: '单选 / 多选互斥 / 计算汇总',
+    formDesc: '检查结果记录与缺陷等级评定',
     tree: fa02,
   },
   {
@@ -402,8 +402,8 @@ export const systemASavedData: Record<string, Record<string, { status: number; d
     'F-A01': {
       status: 3,
       data: {
-        check_no: 'XJ-DEMO-0001',
-        _custom_group_设备信息: { device_name: '1号主循环水泵', device_no: 'SB-DEMO-001' },
+        check_no: 'XJ-2026-0001',
+        _custom_group_设备信息: { device_name: '1号主循环水泵', device_no: 'SB-A-001' },
         device_type: 'pump',
         check_category: 'daily',
         check_items: '["ok_look","ok_sound"]',
@@ -412,9 +412,9 @@ export const systemASavedData: Record<string, Record<string, { status: number; d
         device_weight: { magnitude: 120.5, units: 'kg' },
         check_date: '2026-10-15 00:00:00',
         check_time: '09:30',
-        checker_name: '演示员甲',
+        checker_name: '王志强',
         checker_phone: '13800000001',
-        remark: '演示回填数据：包含 JSON 数组字符串、带单位数值、级联路径等格式。',
+        remark: '历史回填数据，包含 JSON 数组字符串、带单位数值、级联路径等格式。',
         site_photos: JSON.stringify([
           { fileName: 'a1b2c3d4e5f60718293a4b5c6d7e8f90_泵体外观.jpg', fileSize: 204800, fileType: 'image/jpeg' },
         ]),
@@ -446,7 +446,7 @@ export const systemASavedData: Record<string, Record<string, { status: number; d
     'F-A01': {
       status: 2,
       data: {
-        check_no: 'XJ-DEMO-0003',
+        check_no: 'XJ-2026-0003',
         _custom_group_设备信息: { device_name: '3号冷却风机' },
         device_type: 'fan',
         check_category: 'daily',

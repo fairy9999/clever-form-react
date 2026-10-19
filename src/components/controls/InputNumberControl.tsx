@@ -6,7 +6,7 @@ import { applyAccuracy } from '@/utils/validation';
 /** 数值输入（精度 / 区间 / 后缀） */
 export function InputNumberControl({ control, value, onChange, viewOnly }: BaseControlProps) {
   const attrs = parsePrivateAttr(control);
-  return (
+  const input = (
     <InputNumber
       style={{ width: '100%' }}
       value={value === null || value === undefined || value === '' ? null : Number(value)}
@@ -14,7 +14,6 @@ export function InputNumberControl({ control, value, onChange, viewOnly }: BaseC
       disabled={viewOnly || control.disabled}
       readOnly={control.readonly}
       placeholder={control.placeholder ?? `请输入${control.nameZh}`}
-      addonAfter={attrs.suffix}
       onChange={(v) => {
         if (v === null || v === undefined) {
           onChange(null);
@@ -24,4 +23,13 @@ export function InputNumberControl({ control, value, onChange, viewOnly }: BaseC
       }}
     />
   );
+  if (attrs.suffix) {
+    return (
+      <div className="cf-unit-control">
+        {input}
+        <span className="cf-unit-suffix">{attrs.suffix}</span>
+      </div>
+    );
+  }
+  return input;
 }

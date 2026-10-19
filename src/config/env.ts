@@ -14,4 +14,4 @@ export const env = {
   tokenKey: (raw.VITE_TOKEN_KEY as string) || 'CF-AUTH-TOKEN',
 } as const;
 
-export const APP_NAME = 'clever-form-react';
+export const APP_NAME = '动态表单平台';

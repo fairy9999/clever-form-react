@@ -1,5 +1,5 @@
 /**
- * 演示系统 B：示例·动态表单能力演示（完全虚构）
+ * 演示系统 B：设备运维评估管理系统（完全虚构）
  * 覆盖动态能力：控件联动显隐（DISPLAY/SKIP/type-2 选项过滤/单位值规则/禁用默认值）、
  * 动态复制组（增删记录、记录内联动、上限）、评分自动汇总（表达式 + 特殊值映射 + 分段评级）。
  */
@@ -7,7 +7,7 @@ import type { ControlDef } from '@/types/control';
 import type { MenuRuleConfig } from '@/types/form';
 import { ctrl, pa } from './shared';
 
-/* ---------- F-B01 联动显隐演示 ---------- */
+/* ---------- F-B01 设备规格登记 ---------- */
 
 const fb01: ControlDef[] = [
   ctrl({
@@ -125,7 +125,7 @@ const fb01: ControlDef[] = [
   }),
 ];
 
-/* ---------- F-B02 动态复制组演示 ---------- */
+/* ---------- F-B02 运维成员登记 ---------- */
 
 const fb02: ControlDef[] = [
   ctrl({
@@ -192,7 +192,7 @@ const fb02: ControlDef[] = [
   }),
 ];
 
-/* ---------- F-B03 评分自动汇总演示 ---------- */
+/* ---------- F-B03 运维质量评估 ---------- */
 
 const scoreOptions = (namePrefix: string) => [
   { value: '0', label: '0', desc: `${namePrefix}：无` },
@@ -261,7 +261,7 @@ const fb03: ControlDef[] = [
 export const systemBForms = [
   {
     formId: 'F-B01',
-    formName: '联动显隐演示',
+    formName: '设备规格登记',
     formOrder: 1,
     enabled: true,
     formLayout: 'horizontal' as const,
@@ -270,7 +270,7 @@ export const systemBForms = [
   },
   {
     formId: 'F-B02',
-    formName: '动态复制组演示',
+    formName: '运维成员登记',
     formOrder: 2,
     enabled: true,
     formLayout: 'horizontal' as const,
@@ -279,7 +279,7 @@ export const systemBForms = [
   },
   {
     formId: 'F-B03',
-    formName: '评分自动汇总演示',
+    formName: '运维质量评估',
     formOrder: 3,
     enabled: true,
     formLayout: 'horizontal' as const,
@@ -308,8 +308,8 @@ export const systemBSavedData: Record<string, Record<string, { status: number; d
       status: 3,
       data: {
         grp_member: [
-          { member_name: '张演示', member_role: 'leader', member_note: '负责主控调试' },
-          { member_name: '李示例', member_role: 'member' },
+          { member_name: '张明远', member_role: 'leader', member_note: '负责主控调试' },
+          { member_name: '李文博', member_role: 'member' },
         ],
         _custom_group_audit: { auditor: '王记录' },
       },

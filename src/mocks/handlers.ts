@@ -90,7 +90,7 @@ export const handlers = [
       entityId: `ENT-${Date.now().toString(36).toUpperCase()}`,
       systemId: body.systemId,
       entityName: body.entityName,
-      creatorName: '当前演示用户',
+      creatorName: '系统管理员',
       createDate: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`,
       dataJson: JSON.stringify(body.extraJson ?? {}),
     };
@@ -220,9 +220,9 @@ export const handlers = [
 
   http.get('*/api/presets/personnel', async () =>
     ok([
-      { Name: '演示员甲', Tel_No: '13800000001' },
-      { Name: '演示员乙', Tel_No: '13900000002' },
-      { Name: '演示员丙', Tel_No: '13700000003' },
+      { Name: '王志强', Tel_No: '13800000001' },
+      { Name: '李建国', Tel_No: '13900000002' },
+      { Name: '赵国栋', Tel_No: '13700000003' },
     ]),
   ),
 

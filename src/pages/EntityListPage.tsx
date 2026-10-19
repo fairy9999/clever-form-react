@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { App, Button, Form, Input, Modal, Popconfirm, Space, Table, Typography } from 'antd';
-import { ArrowLeftOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { createEntity, deleteEntity, getEntities } from '@/api';
+import { ArrowLeftOutlined, DeleteOutlined, EditOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons';
+import { createEntity, deleteEntity, getEntities, getSystems } from '@/api';
 import { useSessionStore } from '@/store/sessionStore';
 import type { EntityItem } from '@/types/form';
 
-/** 实体列表（建档 / 进入填报 / 查看详情） */
+/** 实体列表（建档 / 数据录入 / 详情查看） */
 export function EntityListPage() {
   const { systemId = '' } = useParams();
   const navigate = useNavigate();
@@ -16,7 +16,17 @@ export function EntityListPage() {
   const [entities, setEntities] = useState<EntityItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [createOpen, setCreateOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (!systemId) return;
+    // 直接刷新进入时 sessionStore 为空，从系统列表恢复当前系统
+    if (!system || system.systemId !== systemId) {
+      getSystems().then((list) => setSystem(list.find((s) => s.systemId === systemId) ?? null));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [systemId]);
 
   const load = () => {
     setLoading(true);
@@ -25,34 +35,31 @@ export function EntityListPage() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(() => {
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [systemId]);
+  useEffect(load, [systemId]);
 
   const columns = [
     { title: '实体名称', dataIndex: 'entityName' },
-    { title: '创建人', dataIndex: 'creatorName', width: 140 },
-    { title: '创建时间', dataIndex: 'createDate', width: 180 },
+    { title: '建档人', dataIndex: 'creatorName', width: 140 },
+    { title: '建档日期', dataIndex: 'createDate', width: 180 },
     {
       title: '操作',
       width: 260,
       render: (_: unknown, record: EntityItem) => (
         <Space>
           <Button type="primary" size="small" icon={<EditOutlined />} onClick={() => navigate(`/collect/${record.entityId}`)}>
-            填报
+            录入
           </Button>
-          <Button size="small" onClick={() => navigate(`/view/${record.entityId}`)}>
+          <Button size="small" icon={<EyeOutlined />} onClick={() => navigate(`/view/${record.entityId}`)}>
             详情
           </Button>
           <Popconfirm
-            title="确认删除该实体？"
-            description="实体及其表单数据将一并删除"
-            okText="删除"
+            title="提示"
+            description="您确定要删除这条记录吗？此操作不可撤销。"
+            okText="确定"
             cancelText="取消"
             onConfirm={async () => {
               await deleteEntity(record.entityId);
-              message.success('已删除');
+              message.success('删除成功');
               load();
             }}
           >
@@ -65,49 +72,65 @@ export function EntityListPage() {
     },
   ];
 
+  const handleCreate = async () => {
+    const values = await form.validateFields();
+    setSubmitting(true);
+    try {
+      const extraJson: Record<string, unknown> = {};
+      if (values.deviceName) extraJson.deviceName = values.deviceName;
+      if (values.deviceNo) extraJson.deviceNo = values.deviceNo;
+      await createEntity({ systemId, entityName: values.entityName, extraJson });
+      message.success('创建成功');
+      setCreateOpen(false);
+      load();
+    } catch (e) {
+      message.error(e instanceof Error ? e.message : '创建失败');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="cf-page">
       <div className="cf-page-head">
         <Space>
           <Button icon={<ArrowLeftOutlined />} onClick={() => navigate('/')}/>
           <Typography.Title level={3} style={{ margin: 0 }}>
-            {system?.systemName ?? systemId} · 实体列表
+            {system?.systemName ?? systemId}
           </Typography.Title>
         </Space>
         <Button type="primary" icon={<PlusOutlined />} onClick={() => { form.resetFields(); setCreateOpen(true); }}>
-          新建实体
+          建档
         </Button>
       </div>
-      <Table rowKey="entityId" columns={columns} dataSource={entities} loading={loading} pagination={false} />
+      <Table
+        rowKey="entityId"
+        columns={columns}
+        dataSource={entities}
+        loading={loading}
+        pagination={false}
+        className="cf-entity-table"
+      />
 
       <Modal
-        title="新建实体"
+        title="建档"
         open={createOpen}
-        okText="创建"
-        cancelText="取消"
-        onOk={() =>
-          form
-            .validateFields()
-            .then(async (values: { entityName: string; deviceName?: string; deviceNo?: string }) => {
-              const extraJson: Record<string, unknown> = {};
-              if (values.deviceName) extraJson.deviceName = values.deviceName;
-              if (values.deviceNo) extraJson.deviceNo = values.deviceNo;
-              await createEntity({ systemId, entityName: values.entityName, extraJson });
-              message.success('创建成功（附加字段将随 dataSync 回填表单）');
-              setCreateOpen(false);
-              load();
-            })
-        }
+        okText="确 定"
+        cancelText="取 消"
+        confirmLoading={submitting}
+        onOk={() => void handleCreate()}
+        onCancel={() => setCreateOpen(false)}
+        width={480}
       >
-        <Form form={form} layout="vertical">
+        <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
           <Form.Item name="entityName" label="实体名称" rules={[{ required: true, message: '请输入实体名称' }]}>
-            <Input placeholder="如：5号机组·巡检记录" />
+            <Input placeholder="请输入实体名称" />
           </Form.Item>
-          <Form.Item name="deviceName" label="附加字段·设备名称（dataSync 演示）">
-            <Input placeholder="留空则不回填" />
+          <Form.Item name="deviceName" label="设备名称">
+            <Input placeholder="请输入设备名称" />
           </Form.Item>
-          <Form.Item name="deviceNo" label="附加字段·设备编号（dataSync 演示）">
-            <Input placeholder="留空则不回填" />
+          <Form.Item name="deviceNo" label="设备编号">
+            <Input placeholder="请输入设备编号" />
           </Form.Item>
         </Form>
       </Modal>

@@ -50,7 +50,6 @@ export interface SystemItem {
   creatorName: string;
   createDate: string;
   /** 演示标签：fixture 说明 */
-  demoTag?: string;
 }
 
 /** 实体字段 → 表单字段同步映射（替代原后端按 formId 写死的 dataSync） */

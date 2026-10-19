@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, Col, Empty, Pagination, Row, Spin, Tag, Typography } from 'antd';
+import { Button, Card, Col, Empty, Pagination, Row, Spin, Typography } from 'antd';
 import { FolderOpenOutlined, LogoutOutlined, ReloadOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
 import { getSystems } from '@/api';
 import { useAuthStore } from '@/store/authStore';
@@ -75,9 +75,6 @@ export function SystemListPage() {
                     </span>
                     <span>{s.createDate.slice(0, 10)}</span>
                   </div>
-                  <Tag className="cf-card-enter" color="processing">
-                    进入系统 →
-                  </Tag>
                 </Card>
               </Col>
             ))}

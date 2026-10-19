@@ -127,11 +127,7 @@ body {
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 18px 18px 14px;
-  }
-
-  &:hover .cf-card-enter {
-    opacity: 1;
+    padding: 18px 18px 16px;
   }
 }
 
@@ -186,12 +182,6 @@ body {
   }
 }
 
-.cf-card-enter {
-  margin: 10px 0 0;
-  align-self: flex-start;
-  opacity: 0.75;
-}
-
 .cf-pagination {
   display: flex;
   align-items: center;
@@ -206,6 +196,11 @@ body {
   .ant-table-thead > tr > th {
     background: #f5f7fa;
     color: #606266;
+  }
+
+  /* scroll.y 模式下固定表体高度：数据少时表格区域也保持完整高度 */
+  .ant-table-body {
+    height: 440px;
   }
 }
 

@@ -30,10 +30,17 @@ export function InputTextControl({ control, value, onChange, onBatchChange, view
           config={preset}
           onClose={() => setPresetOpen(false)}
           onPick={(result) => {
-            // main 回填本控件；adjoin 按配置回填到相邻控件（identifier）
-            onChange(result.main);
-            if (preset.adjoinIdentifier && result.adjoin !== undefined && onBatchChange) {
-              onBatchChange({ [preset.adjoinIdentifier]: result.adjoin });
+            // main 回填本控件；adjoin 按配置回填到相邻控件（identifier）。
+            // 必须合并为一次批量更新：分开调 onChange/onBatchChange 会基于同一个旧闭包值，
+            // 后者会把前者写入的字段覆盖掉（表现为"选人后姓名不回显"）。
+            const values: Record<string, unknown> = { [control.identifier]: result.main };
+            if (preset.adjoinIdentifier && result.adjoin !== undefined) {
+              values[preset.adjoinIdentifier] = result.adjoin;
+            }
+            if (onBatchChange) {
+              onBatchChange(values);
+            } else {
+              onChange(result.main);
             }
             setPresetOpen(false);
           }}

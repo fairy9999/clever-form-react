@@ -36,7 +36,7 @@ body {
 /* ---------- 页面骨架 ---------- */
 
 .cf-page {
-  max-width: 1440px;
+  // max-width: 1440px;
   margin: 0 auto;
   padding: 20px 28px 40px;
 }
@@ -71,7 +71,7 @@ body {
 /* ---------- 登录页 ---------- */
 
 .cf-login-page {
-  min-height: 100%;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;

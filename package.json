@@ -2,7 +2,7 @@
   "name": "clever-form-react",
   "version": "1.0.0",
   "private": true,
-  "description": "React 动态表单渲染系统（由 Vue 2 版本重构，全量 Mock 演示版）",
+  "description": "React 动态表单渲染系统（由 Vue 版本重构，全量 Mock 演示版）",
   "type": "module",
   "scripts": {
     "dev": "vite",

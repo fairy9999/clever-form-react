@@ -30,7 +30,7 @@ page.on('pageerror', (err) => errors.push(`[pageerror] ${err.message}`));
 /* ---------- 登录页 ---------- */
 await page.goto(`${BASE}/login`);
 await page.waitForSelector('.cf-login-card');
-check('登录页：标题为"动态表单平台"', (await page.textContent('.cf-login-title'))?.trim() === '动态表单平台');
+check('登录页：标题为"动态表单工具"', (await page.textContent('.cf-login-title'))?.trim() === '动态表单工具');
 check('登录页：包含账号/手机号登录 Tab', await page.isVisible('text=手机号登录'));
 check('登录页：无演示提示', !(await page.content()).includes('演示'));
 

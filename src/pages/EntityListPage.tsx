@@ -109,7 +109,7 @@ export function EntityListPage() {
         dataSource={entities}
         loading={loading}
         pagination={{ pageSize: 10, showSizeChanger: false, showTotal: (t) => `共 ${t} 条档案` }}
-        scroll={{ y: 440 }}
+        // scroll={{ y: 440 }}
         className="cf-entity-table"
       />
 

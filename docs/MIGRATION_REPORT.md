@@ -1,6 +1,6 @@
 # 迁移报告
 
-> 源：`vue_clever_form`（Vue 2.5 + webpack 3 + element-ui 2 + Vuex 3）
+> 源：`vue_clever_form`
 > 目标：`clever-form-react`（React 18 + TypeScript + Vite 5 + Ant Design 5 + Zustand + React Router 6）
 
 ## 1. 迁移映射表

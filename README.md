@@ -1,6 +1,6 @@
-# 动态表单平台（clever-form-react）
+# 动态表单工具（clever-form-react）
 
-基于 schema 驱动的 React 动态表单渲染引擎，由 Vue 2 动态表单系统迁移重构而来。
+基于 schema 驱动的 React 动态表单渲染引擎，由 Vue 动态表单系统迁移重构而来。
 
 ```bash
 npm install

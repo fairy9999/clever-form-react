@@ -38,7 +38,7 @@ check('登录页：无演示提示', !(await page.content()).includes('演示'))
 await page.evaluate(() => localStorage.setItem('CF-AUTH-TOKEN', 'e2e-token'));
 await page.goto(`${BASE}/`);
 await page.waitForSelector('.cf-system-card');
-check('系统列表：显示"设备巡检管理系统"', (await page.content()).includes('设备巡检管理系统'));
+check('系统列表：显示"慢病随访管理系统"', (await page.content()).includes('慢病随访管理系统'));
 check('系统列表：无演示字样', !(await page.content()).includes('演示'));
 
 /* ---------- 实体列表 + 建档弹框 ---------- */
@@ -94,9 +94,9 @@ check('填报页：单个"保存"按钮', (await page.locator('button:has-text("
 check('填报页：无演示字样', !(await page.content()).includes('演示'));
 check('填报页：已回填数据渲染', (await page.locator('.cf-form input, .cf-form textarea').count()) > 0);
 
-/* 静态分组内控件不得被隐藏清值逻辑误清空（原 bug：设备名称/编号被清空） */
-const groupName = await page.inputValue('input[placeholder="请输入设备名称"]').catch(() => '');
-check('填报页：分组字段回填不被清空（原 bug）', groupName === '1号主循环水泵');
+/* 静态分组内控件不得被隐藏清值逻辑误清空（原 bug：患者姓名/门诊号被清空） */
+const groupName = await page.inputValue('input[placeholder="请输入患者姓名"]').catch(() => '');
+check('填报页：分组字段回填不被清空（原 bug）', groupName === '张建国');
 
 /* 预设弹框（InputText 的预设按钮） */
 const presetBtn = page.locator('.cf-form .ant-btn:has(.anticon-user)');

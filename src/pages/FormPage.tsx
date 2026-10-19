@@ -279,7 +279,7 @@ export function FormPage({ mode }: FormPageProps) {
   }
 
   return (
-    <div className="cf-page">
+    <div className="cf-page cf-page--full">
       <div className="cf-page-head">
         <Space>
           <Button icon={<ArrowLeftOutlined />} onClick={() => navigate(-1)} />
@@ -348,14 +348,16 @@ export function FormPage({ mode }: FormPageProps) {
                 )}
               </div>
               {activeForm.formDesc && <p className="cf-panel-desc">{activeForm.formDesc}</p>}
-              <FormRenderer
-                controls={controls}
-                value={formData}
-                ruleFormData={ruleFormData}
-                viewOnly={viewOnly}
-                errors={errors}
-                onChange={setFormData}
-              />
+              <div className="cf-main-body">
+                <FormRenderer
+                  controls={controls}
+                  value={formData}
+                  ruleFormData={ruleFormData}
+                  viewOnly={viewOnly}
+                  errors={errors}
+                  onChange={setFormData}
+                />
+              </div>
             </>
           )}
         </main>

@@ -38,7 +38,7 @@ export function EntityListPage() {
   useEffect(load, [systemId]);
 
   const columns = [
-    { title: '实体名称', dataIndex: 'entityName' },
+    { title: '档案名称', dataIndex: 'entityName' },
     { title: '建档人', dataIndex: 'creatorName', width: 140 },
     { title: '建档日期', dataIndex: 'createDate', width: 180 },
     {
@@ -77,8 +77,8 @@ export function EntityListPage() {
     setSubmitting(true);
     try {
       const extraJson: Record<string, unknown> = {};
-      if (values.deviceName) extraJson.deviceName = values.deviceName;
-      if (values.deviceNo) extraJson.deviceNo = values.deviceNo;
+      if (values.patientName) extraJson.patientName = values.patientName;
+      if (values.patientNo) extraJson.patientNo = values.patientNo;
       await createEntity({ systemId, entityName: values.entityName, extraJson });
       message.success('创建成功');
       setCreateOpen(false);
@@ -123,14 +123,14 @@ export function EntityListPage() {
         width={480}
       >
         <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
-          <Form.Item name="entityName" label="实体名称" rules={[{ required: true, message: '请输入实体名称' }]}>
-            <Input placeholder="请输入实体名称" />
+          <Form.Item name="entityName" label="档案名称" rules={[{ required: true, message: '请输入档案名称' }]}>
+            <Input placeholder="请输入档案名称，如：张建国高血压随访档案" />
           </Form.Item>
-          <Form.Item name="deviceName" label="设备名称">
-            <Input placeholder="请输入设备名称" />
+          <Form.Item name="patientName" label="患者姓名">
+            <Input placeholder="请输入患者姓名" />
           </Form.Item>
-          <Form.Item name="deviceNo" label="设备编号">
-            <Input placeholder="请输入设备编号" />
+          <Form.Item name="patientNo" label="病历号">
+            <Input placeholder="请输入病历号" />
           </Form.Item>
         </Form>
       </Modal>

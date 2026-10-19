@@ -13,23 +13,28 @@ const ok = <T>(data: T, message = 'OK') => HttpResponse.json({ code: 200, messag
 const fail = (message: string, code = 400) =>
   HttpResponse.json({ code, message, data: null }, { status: 200 });
 
-/** 级联数据（虚构三级行政区划风格的演示树） */
+/** 级联数据（虚构的院区 / 科室 / 诊室三级树） */
 const CASCADE_TREE: Record<string, CascadeNode[]> = {
   '': [
-    { value: 'east', label: '东区', isLeaf: false },
-    { value: 'west', label: '西区', isLeaf: false },
+    { value: 'main', label: '总院', isLeaf: false },
+    { value: 'branch', label: '分院', isLeaf: false },
   ],
-  east: [
-    { value: 'hangzhou', label: '杭州楼', isLeaf: false },
-    { value: 'ningbo', label: '宁波楼', isLeaf: false },
+  main: [
+    { value: 'cardio', label: '心血管内科', isLeaf: false },
+    { value: 'endo', label: '内分泌科', isLeaf: false },
+    { value: 'respi', label: '呼吸内科', isLeaf: false },
   ],
-  west: [{ value: 'chengdu', label: '成都楼', isLeaf: false }],
-  'east/hangzhou': [
-    { value: 'xihu', label: '西湖机房', isLeaf: true },
-    { value: 'binjiang', label: '滨江机房', isLeaf: true },
+  branch: [{ value: 'general', label: '全科医学科', isLeaf: false }],
+  'main/cardio': [
+    { value: 'hypertension', label: '高血压专科门诊', isLeaf: true },
+    { value: 'heartfailure', label: '心衰专科门诊', isLeaf: true },
   ],
-  'east/ningbo': [{ value: 'haishu', label: '海曙机房', isLeaf: true }],
-  'west/chengdu': [{ value: 'wuhou', label: '武侯机房', isLeaf: true }],
+  'main/endo': [
+    { value: 'diabetes', label: '糖尿病专科门诊', isLeaf: true },
+    { value: 'thyroid', label: '甲状腺专科门诊', isLeaf: true },
+  ],
+  'main/respi': [{ value: 'copd', label: '慢阻肺专科门诊', isLeaf: true }],
+  'branch/general': [{ value: 'followup', label: '慢病随访门诊', isLeaf: true }],
 };
 
 /** 简单验证码 SVG（data URI） */
@@ -220,16 +225,16 @@ export const handlers = [
 
   http.get('*/api/presets/personnel', async () =>
     ok([
-      { Name: '王志强', Tel_No: '13800000001' },
-      { Name: '李建国', Tel_No: '13900000002' },
-      { Name: '赵国栋', Tel_No: '13700000003' },
+      { Name: '陈建国', Tel_No: '13800000001' },
+      { Name: '刘雅琴', Tel_No: '13900000002' },
+      { Name: '孙丽华', Tel_No: '13700000003' },
     ]),
   ),
 
   http.get('*/api/presets/areas', async () =>
     ok([
-      { UAName: '示范园区 1 号楼', UACode: 'UA-001' },
-      { UAName: '示范园区 2 号楼', UACode: 'UA-002' },
+      { UAName: '总院门诊楼', UACode: 'UA-001' },
+      { UAName: '分院体检中心', UACode: 'UA-002' },
     ]),
   ),
 ];

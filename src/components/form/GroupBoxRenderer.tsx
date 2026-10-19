@@ -96,35 +96,37 @@ export function GroupBoxRenderer({
                   </Button>
                 )}
               </div>
-              {clones.map((child) => {
-                const visible = shouldShowControl(child, recordCtx);
-                if (!visible) return null;
-                const options =
-                  child.selectedControlType === 'radio' || child.selectedControlType === 'checkbox' || child.selectedControlType === 'select'
-                    ? filterOptionsByRules(child, recordCtx)
-                    : undefined;
-                return (
-                  <ControlItem
-                    key={child.identifier}
-                    control={child}
-                    formData={formData}
-                    recordData={record}
-                    options={options}
-                    variables={variables}
-                    viewOnly={viewOnly}
-                    error={errors[`${child.identifier}#${index}`]}
-                    onChange={(v) => onChange(setControlValue(formData, child, v))}
-                    onBatchChange={(values) => {
-                      let next = formData;
-                      for (const [identifier, v] of Object.entries(values)) {
-                        const sibling = clones.find((c) => c.identifier === identifier);
-                        if (sibling) next = setControlValue(next, sibling, v);
-                      }
-                      if (next !== formData) onChange(next);
-                    }}
-                  />
-                );
-              })}
+              <div className="cf-form">
+                {clones.map((child) => {
+                  const visible = shouldShowControl(child, recordCtx);
+                  if (!visible) return null;
+                  const options =
+                    child.selectedControlType === 'radio' || child.selectedControlType === 'checkbox' || child.selectedControlType === 'select'
+                      ? filterOptionsByRules(child, recordCtx)
+                      : undefined;
+                  return (
+                    <ControlItem
+                      key={child.identifier}
+                      control={child}
+                      formData={formData}
+                      recordData={record}
+                      options={options}
+                      variables={variables}
+                      viewOnly={viewOnly}
+                      error={errors[`${child.identifier}#${index}`]}
+                      onChange={(v) => onChange(setControlValue(formData, child, v))}
+                      onBatchChange={(values) => {
+                        let next = formData;
+                        for (const [identifier, v] of Object.entries(values)) {
+                          const sibling = clones.find((c) => c.identifier === identifier);
+                          if (sibling) next = setControlValue(next, sibling, v);
+                        }
+                        if (next !== formData) onChange(next);
+                      }}
+                    />
+                  );
+                })}
+              </div>
             </div>
           );
         })}
@@ -139,33 +141,35 @@ export function GroupBoxRenderer({
       {!attrs.invisible && <div className="cf-group-head">
         <span className="cf-group-title">{group.nameZh}</span>
       </div>}
-      {children.map((child) => {
-        if (!shouldShowControl(child, ctx)) return null;
-        const options =
-          child.selectedControlType === 'radio' || child.selectedControlType === 'checkbox' || child.selectedControlType === 'select'
-            ? filterOptionsByRules(child, ctx)
-            : undefined;
-        return (
-          <ControlItem
-            key={child.identifier}
-            control={child}
-            formData={formData}
-            options={options}
-            variables={variables}
-            viewOnly={viewOnly}
-            error={errors[child.identifier]}
-            onChange={(v) => onChange(setControlValue(formData, child, v))}
-            onBatchChange={(values) => {
-              let next = formData;
-              for (const [identifier, v] of Object.entries(values)) {
-                const sibling = children.find((c) => c.identifier === identifier);
-                if (sibling) next = setControlValue(next, sibling, v);
-              }
-              if (next !== formData) onChange(next);
-            }}
-          />
-        );
-      })}
+      <div className="cf-form">
+        {children.map((child) => {
+          if (!shouldShowControl(child, ctx)) return null;
+          const options =
+            child.selectedControlType === 'radio' || child.selectedControlType === 'checkbox' || child.selectedControlType === 'select'
+              ? filterOptionsByRules(child, ctx)
+              : undefined;
+          return (
+            <ControlItem
+              key={child.identifier}
+              control={child}
+              formData={formData}
+              options={options}
+              variables={variables}
+              viewOnly={viewOnly}
+              error={errors[child.identifier]}
+              onChange={(v) => onChange(setControlValue(formData, child, v))}
+              onBatchChange={(values) => {
+                let next = formData;
+                for (const [identifier, v] of Object.entries(values)) {
+                  const sibling = children.find((c) => c.identifier === identifier);
+                  if (sibling) next = setControlValue(next, sibling, v);
+                }
+                if (next !== formData) onChange(next);
+              }}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { App, Button, List } from 'antd';
-import { DeleteOutlined, EyeOutlined, PaperClipOutlined, UploadOutlined } from '@ant-design/icons';
+import { DeleteOutlined, PaperClipOutlined, UploadOutlined } from '@ant-design/icons';
 import type { BaseControlProps } from './types';
 import { parsePrivateAttr } from '@/utils/privateAttr';
-import { deleteFile, filePreviewUrl, parseFileEntries, uploadFiles } from '@/api';
+import { deleteFile, parseFileEntries, uploadFiles } from '@/api';
 import type { FileEntry } from '@/types/control';
 
 /** 展示名：去掉服务端存储名的 32 位十六进制前缀 */
@@ -77,17 +77,8 @@ export function UploadControl({ control, value, onChange, viewOnly }: BaseContro
         locale={{ emptyText: '暂无附件' }}
         renderItem={(item) => (
           <List.Item
-            actions={[
-              <Button
-                key="view"
-                type="link"
-                size="small"
-                icon={<EyeOutlined />}
-                onClick={() => window.open(filePreviewUrl(item.fileName), '_blank')}
-              >
-                预览
-              </Button>,
-              ...(viewOnly
+            actions={
+              viewOnly
                 ? []
                 : [
                     <Button
@@ -103,8 +94,8 @@ export function UploadControl({ control, value, onChange, viewOnly }: BaseContro
                     >
                       删除
                     </Button>,
-                  ]),
-            ]}
+                  ]
+            }
           >
             <span className="cf-upload-name">
               <PaperClipOutlined /> {displayName(item.fileName)}（

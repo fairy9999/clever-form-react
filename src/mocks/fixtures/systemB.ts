@@ -1,31 +1,33 @@
 /**
- * 演示系统 B：设备运维评估管理系统（完全虚构）
+ * 系统 B：健康风险评估管理系统（完全虚构）
  * 覆盖动态能力：控件联动显隐（DISPLAY/SKIP/type-2 选项过滤/单位值规则/禁用默认值）、
  * 动态复制组（增删记录、记录内联动、上限）、评分自动汇总（表达式 + 特殊值映射 + 分段评级）。
+ * 表单：既往史与过敏史评估 / 家族史登记 / 生活质量评分。
  */
 import type { ControlDef } from '@/types/control';
 import type { MenuRuleConfig } from '@/types/form';
 import { ctrl, pa } from './shared';
 
-/* ---------- F-B01 设备规格登记 ---------- */
+/* ---------- F-B01 既往史与过敏史评估 ---------- */
 
 const fb01: ControlDef[] = [
   ctrl({
     identifier: 'link_switch',
-    nameZh: '联动开关',
+    nameZh: '是否伴随症状',
     selectedControlType: 'radio',
     required: true,
-    desc: '选择“显示附加项”时，下方“附加说明”出现（DISPLAY 规则）',
+    desc: '选择“有伴随症状”时，下方“伴随症状描述”出现（DISPLAY 规则）',
     privateAttr: pa({
       options: [
-        { value: 'show', label: '显示附加项' },
-        { value: 'hide', label: '隐藏附加项' },
+        { value: 'show', label: '有伴随症状' },
+        { value: 'hide', label: '无伴随症状' },
       ],
+      numberOfOptionsPerLine: 2,
     }),
   }),
   ctrl({
     identifier: 'extra_note',
-    nameZh: '附加说明',
+    nameZh: '伴随症状描述',
     selectedControlType: 'input-text',
     ruleType: 'DISPLAY',
     logicalConjunction: 'AND',
@@ -41,10 +43,10 @@ const fb01: ControlDef[] = [
   }),
   ctrl({
     identifier: 'hidden_note',
-    nameZh: '隐藏备注',
+    nameZh: '康复指导',
     selectedControlType: 'input-textarea',
     colNumber: 12,
-    desc: '选择“隐藏附加项”时本控件被隐藏（SKIP 规则）',
+    desc: '选择“有伴随症状”时本控件被隐藏（SKIP 规则）',
     ruleType: 'SKIP',
     ruleList: [
       {
@@ -58,26 +60,27 @@ const fb01: ControlDef[] = [
   }),
   ctrl({
     identifier: 'spec_level',
-    nameZh: '规格等级',
+    nameZh: '过敏状态',
     selectedControlType: 'radio',
     required: true,
-    desc: '选择“标准型”时，“适用配件”仅显示 P1 / P2（type=2 选项过滤规则）',
+    desc: '选择“已知过敏”时，“可疑过敏原”仅显示 花粉 / 尘螨（type=2 选项过滤规则）',
     privateAttr: pa({
       options: [
-        { value: 'std', label: '标准型' },
-        { value: 'pro', label: '增强型' },
+        { value: 'std', label: '已知过敏' },
+        { value: 'pro', label: '未发现过敏' },
       ],
+      numberOfOptionsPerLine: 2,
     }),
   }),
   ctrl({
     identifier: 'part_select',
-    nameZh: '适用配件',
+    nameZh: '可疑过敏原',
     selectedControlType: 'select',
     privateAttr: pa({
       options: [
-        { value: 'P1', label: '配件 P1' },
-        { value: 'P2', label: '配件 P2' },
-        { value: 'P3', label: '配件 P3' },
+        { value: 'P1', label: '花粉' },
+        { value: 'P2', label: '尘螨' },
+        { value: 'P3', label: '海鲜' },
       ],
     }),
     ruleList: [
@@ -93,15 +96,15 @@ const fb01: ControlDef[] = [
   }),
   ctrl({
     identifier: 'unit_value',
-    nameZh: '数值联动（kg）',
+    nameZh: '体重（kg）',
     selectedControlType: 'input-number-unit',
     privateAttr: pa({ units: [{ unit: 'kg' }] }),
   }),
   ctrl({
     identifier: 'magnitude_note',
-    nameZh: '满量提示',
+    nameZh: '体重预警提示',
     selectedControlType: 'input-text',
-    desc: '数值联动：带单位数值 = 100 时显示（依赖 magnitude）',
+    desc: '数值联动：体重 = 100 时显示（依赖 magnitude）',
     ruleType: 'DISPLAY',
     logicalConjunction: 'AND',
     ruleList: [
@@ -117,20 +120,20 @@ const fb01: ControlDef[] = [
   }),
   ctrl({
     identifier: 'default_no',
-    nameZh: '默认单号',
+    nameZh: '评估档案编号',
     selectedControlType: 'input-text',
     disabled: true,
     desc: '禁用控件 + 默认值：隐藏再显示后默认值自动恢复',
-    privateAttr: pa({ defaultValue: 'AUTO-0001' }),
+    privateAttr: pa({ defaultValue: 'MED-0001' }),
   }),
 ];
 
-/* ---------- F-B02 运维成员登记 ---------- */
+/* ---------- F-B02 家族史登记（动态复制组） ---------- */
 
 const fb02: ControlDef[] = [
   ctrl({
     identifier: 'grp_member',
-    nameZh: '成员登记',
+    nameZh: '家族史记录',
     selectedControlType: 'group-box',
     colNumber: 12,
     maxCount: 5,
@@ -138,29 +141,29 @@ const fb02: ControlDef[] = [
     children: [
       ctrl({
         identifier: 'member_name',
-        nameZh: '成员姓名',
+        nameZh: '家属姓名',
         selectedControlType: 'input-text',
         required: true,
       }),
       ctrl({
         identifier: 'member_role',
-        nameZh: '成员角色',
+        nameZh: '亲属关系',
         selectedControlType: 'radio',
         required: true,
         privateAttr: pa({
           options: [
-            { value: 'leader', label: '负责人' },
-            { value: 'member', label: '成员' },
+            { value: 'leader', label: '直系亲属' },
+            { value: 'member', label: '旁系亲属' },
           ],
           numberOfOptionsPerLine: 2,
         }),
       }),
       ctrl({
         identifier: 'member_note',
-        nameZh: '职责备注',
+        nameZh: '家族病史描述',
         selectedControlType: 'input-text',
         colNumber: 12,
-        desc: '仅“负责人”记录显示（记录内 DISPLAY 规则）',
+        desc: '仅“直系亲属”记录显示（记录内 DISPLAY 规则）',
         ruleType: 'DISPLAY',
         logicalConjunction: 'AND',
         ruleList: [
@@ -192,13 +195,13 @@ const fb02: ControlDef[] = [
   }),
 ];
 
-/* ---------- F-B03 运维质量评估 ---------- */
+/* ---------- F-B03 生活质量评分 ---------- */
 
-const scoreOptions = (namePrefix: string) => [
-  { value: '0', label: '0', desc: `${namePrefix}：无` },
-  { value: '1', label: '1', desc: `${namePrefix}：轻微` },
-  { value: '2', label: '2', desc: `${namePrefix}：中等` },
-  { value: '3', label: '3', desc: `${namePrefix}：严重` },
+const scoreOptions = () => [
+  { value: '0', label: '0 无' },
+  { value: '1', label: '1 轻度' },
+  { value: '2', label: '2 中度' },
+  { value: '3', label: '3 重度' },
 ];
 
 const fb03: ControlDef[] = [
@@ -210,17 +213,17 @@ const fb03: ControlDef[] = [
     privateAttr: pa({
       explanation:
         '六个评分项各 0~3 分；“不详”按 3 分计入总分（特殊值映射）；总分与等级自动计算，无需手填。',
-      bodyFontSize: 12,
+      bodyFontSize: 14,
       bodyFontColor: '#8c8c8c',
     }),
   }),
-  ...(['外观', '密封', '噪声', '振动', '温升', '绝缘'] as const).map((name, i) =>
+  ...(['疼痛', '睡眠', '情绪', '食欲', '体力', '社交'] as const).map((name, i) =>
     ctrl({
       identifier: `item_q${i + 1}`,
       nameZh: `${name}评分`,
       selectedControlType: 'radio',
       required: true,
-      privateAttr: pa({ options: scoreOptions(name), numberOfOptionsPerLine: 4 }),
+      privateAttr: pa({ options: scoreOptions(), numberOfOptionsPerLine: 4 }),
     }),
   ),
   ctrl({
@@ -251,8 +254,8 @@ const fb03: ControlDef[] = [
       countableExpression: '[total_score]',
       gradeMapping: [
         { min: 0, max: 8, value: 'Ⅰ级', label: '状态良好' },
-        { min: 9, max: 14, value: 'Ⅱ级', label: '需关注' },
-        { min: 15, max: 18, value: 'Ⅲ级', label: '需处理' },
+        { min: 9, max: 14, value: 'Ⅱ级', label: '中度影响' },
+        { min: 15, max: 18, value: 'Ⅲ级', label: '严重影响' },
       ],
     }),
   }),
@@ -261,7 +264,7 @@ const fb03: ControlDef[] = [
 export const systemBForms = [
   {
     formId: 'F-B01',
-    formName: '设备规格登记',
+    formName: '既往史与过敏史评估',
     formOrder: 1,
     enabled: true,
     formLayout: 'horizontal' as const,
@@ -270,7 +273,7 @@ export const systemBForms = [
   },
   {
     formId: 'F-B02',
-    formName: '运维成员登记',
+    formName: '家族史登记',
     formOrder: 2,
     enabled: true,
     formLayout: 'horizontal' as const,
@@ -279,7 +282,7 @@ export const systemBForms = [
   },
   {
     formId: 'F-B03',
-    formName: '运维质量评估',
+    formName: '生活质量评分',
     formOrder: 3,
     enabled: true,
     formLayout: 'horizontal' as const,
@@ -296,19 +299,19 @@ export const systemBSavedData: Record<string, Record<string, { status: number; d
       status: 3,
       data: {
         link_switch: 'show',
-        extra_note: '附加说明内容（回填）',
+        extra_note: '活动后气促，休息后缓解（回填）',
         spec_level: 'pro',
         part_select: 'P3',
         unit_value: { magnitude: 100, units: 'kg' },
-        magnitude_note: '已满量',
-        default_no: 'AUTO-0001',
+        magnitude_note: '已达到预警体重',
+        default_no: 'MED-0001',
       },
     },
     'F-B02': {
       status: 3,
       data: {
         grp_member: [
-          { member_name: '张明远', member_role: 'leader', member_note: '负责主控调试' },
+          { member_name: '张明远', member_role: 'leader', member_note: '父亲，原发性高血压' },
           { member_name: '李文博', member_role: 'member' },
         ],
         _custom_group_audit: { auditor: '王记录' },

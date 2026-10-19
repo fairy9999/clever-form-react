@@ -57,9 +57,9 @@ export function PresetDialog({ open, config, onClose, onPick }: PresetDialogProp
   ];
 
   const institutions = [
-    { key: 'i1', name: '示例运维服务中心' },
-    { key: 'i2', name: '示例设备制造厂' },
-    { key: 'i3', name: '示例质量检测站' },
+    { key: 'i1', name: '总院医学检验科' },
+    { key: 'i2', name: '分院影像中心' },
+    { key: 'i3', name: '第三方医学检验所' },
   ];
 
   return (

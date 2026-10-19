@@ -36,9 +36,15 @@ body {
 /* ---------- 页面骨架 ---------- */
 
 .cf-page {
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 20px 24px 40px;
+  padding: 20px 28px 40px;
+}
+
+.cf-page--full {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 32px);
 }
 
 .cf-page-head {
@@ -106,15 +112,91 @@ body {
   padding-top: 14px;
   border-top: 1px solid var(--cf-border);
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--cf-text-muted);
 }
 
 /* ---------- 系统列表卡片 ---------- */
 
-.cf-card-line {
-  margin: 0 0 6px;
-  font-size: 13px;
+.cf-system-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .ant-card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 18px 18px 14px;
+  }
+
+  &:hover .cf-card-enter {
+    opacity: 1;
+  }
+}
+
+.cf-system-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.cf-system-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: #e8f1ff;
+  color: var(--cf-primary);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.cf-system-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cf-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cf-card-desc {
+  flex: 1;
+  margin: 0 0 12px;
+  color: var(--cf-text-muted);
+  line-height: 20px;
+  min-height: 40px;
+}
+
+.cf-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--cf-text-muted);
+  font-size: 14px;
+  padding-top: 10px;
+  border-top: 1px solid #f0f1f3;
+
+  .anticon {
+    margin-right: 4px;
+  }
+}
+
+.cf-card-enter {
+  margin: 10px 0 0;
+  align-self: flex-start;
+  opacity: 0.75;
+}
+
+.cf-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 20px;
   color: var(--cf-text-muted);
 }
 
@@ -132,7 +214,7 @@ body {
 .cf-form {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px 12px;
+  gap: 18px 16px;
 }
 
 .cf-form-item {
@@ -184,14 +266,14 @@ body {
 
 .cf-form-desc {
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--cf-text-muted);
   line-height: 18px;
 }
 
 .cf-form-error {
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--cf-error);
   line-height: 18px;
 }
@@ -202,12 +284,12 @@ body {
   width: 100%;
   border: 1px dashed var(--cf-border);
   border-radius: var(--cf-radius);
-  padding: 14px 16px 16px;
+  padding: 14px 18px 18px;
   margin: 4px 0;
   background: rgba(255, 255, 255, 0.6);
 
   .cf-form {
-    gap: 12px 8px;
+    gap: 16px 12px;
   }
 }
 
@@ -237,7 +319,7 @@ body {
 }
 
 .cf-group-sub {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--cf-text-muted);
 }
 
@@ -245,7 +327,7 @@ body {
   padding: 18px 0;
   text-align: center;
   color: var(--cf-text-muted);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .cf-record {
@@ -269,7 +351,7 @@ body {
 
 .cf-unsupported {
   color: var(--cf-text-muted);
-  font-size: 12px;
+  font-size: 14px;
   padding: 6px 0;
 }
 
@@ -283,7 +365,7 @@ body {
 
 .cf-option-desc {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--cf-text-muted);
   margin-left: 22px;
 }
@@ -333,7 +415,7 @@ body {
   width: 100%;
 
   .cf-upload-name {
-    font-size: 12px;
+    font-size: 14px;
     color: var(--cf-text-muted);
   }
 }
@@ -343,12 +425,16 @@ body {
 .cf-workbench {
   display: flex;
   gap: 16px;
-  align-items: flex-start;
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
 }
 
 .cf-menu {
-  width: 240px;
+  width: 248px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border: 1px solid var(--cf-border);
   border-radius: var(--cf-radius);
@@ -356,13 +442,13 @@ body {
 }
 
 .cf-menu-head {
-  padding: 12px 14px;
+  padding: 13px 14px;
   font-weight: 600;
   border-bottom: 1px solid var(--cf-border);
 }
 
 .cf-menu-list {
-  max-height: 70vh;
+  flex: 1;
   overflow-y: auto;
 }
 
@@ -376,7 +462,7 @@ body {
   background: transparent;
   cursor: pointer;
   text-align: left;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--cf-text);
   border-left: 3px solid transparent;
 
@@ -430,10 +516,17 @@ body {
 .cf-main-panel {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border: 1px solid var(--cf-border);
   border-radius: var(--cf-radius);
-  padding: 20px 22px 24px;
+  padding: 20px 24px 28px;
+}
+
+.cf-main-body {
+  flex: 1;
+  min-height: 0;
 }
 
 .cf-panel-head {
@@ -454,7 +547,7 @@ body {
 .cf-panel-desc {
   margin: 0 0 14px;
   color: var(--cf-text-muted);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 /* 移动端适配 */

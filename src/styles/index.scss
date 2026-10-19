@@ -1,0 +1,415 @@
+/* ============================================================
+   clever-form-react 全局样式
+   类名前缀 cf-，与组件中的 className 一一对应
+   ============================================================ */
+
+:root {
+  --cf-primary: #1677ff;
+  --cf-border: #e5e7eb;
+  --cf-text: #1f2328;
+  --cf-text-muted: #8c8c8c;
+  --cf-error: #ff4d4f;
+  --cf-bg: #f5f6f8;
+  --cf-radius: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  color: var(--cf-text);
+  background: var(--cf-bg);
+  font-size: 14px;
+}
+
+/* ---------- 页面骨架 ---------- */
+
+.cf-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px 40px;
+}
+
+.cf-page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.cf-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.cf-muted {
+  color: var(--cf-text-muted);
+  margin: 4px 0;
+}
+
+/* ---------- 登录页 ---------- */
+
+.cf-login-page {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e8f1ff 0%, #f5f6f8 60%);
+}
+
+.cf-login-card {
+  width: 380px;
+  padding: 32px 28px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(22, 119, 255, 0.08);
+}
+
+.cf-captcha-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cf-captcha-img {
+  height: 32px;
+  border-radius: 4px;
+  border: 1px solid var(--cf-border);
+  cursor: pointer;
+}
+
+/* ---------- 表单区 ---------- */
+
+.cf-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 12px;
+}
+
+.cf-form-item {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* 栅格：colNumber 为 12 分制（12 = 整行），默认 6 → 半行 */
+.cf-form-item {
+  flex: 0 0 auto;
+  width: calc(50% - 6px);
+}
+
+.cf-form-item[data-col='12'],
+.cf-form-item.wide {
+  width: 100%;
+}
+
+.cf-form-item.has-error {
+  .cf-form-label {
+    color: var(--cf-error);
+  }
+}
+
+.cf-form-label {
+  flex: 0 0 128px;
+  padding-right: 12px;
+  padding-top: 5px;
+  text-align: right;
+  color: var(--cf-text);
+  line-height: 20px;
+  word-break: break-all;
+}
+
+.cf-required {
+  color: var(--cf-error);
+  margin-right: 4px;
+}
+
+.cf-form-control {
+  flex: 1;
+  min-width: 0;
+}
+
+.cf-form-control-full {
+  width: 100%;
+}
+
+.cf-form-desc {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--cf-text-muted);
+  line-height: 18px;
+}
+
+.cf-form-error {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--cf-error);
+  line-height: 18px;
+}
+
+/* ---------- 分组 ---------- */
+
+.cf-group {
+  width: 100%;
+  border: 1px dashed var(--cf-border);
+  border-radius: var(--cf-radius);
+  padding: 14px 16px 16px;
+  margin: 4px 0;
+  background: rgba(255, 255, 255, 0.6);
+
+  .cf-form {
+    gap: 12px 8px;
+  }
+}
+
+.cf-group.invisible {
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+
+.cf-group.dynamic {
+  border-style: solid;
+  border-color: #c6dcff;
+  background: #f7faff;
+}
+
+.cf-group-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.cf-group-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--cf-primary);
+}
+
+.cf-group-sub {
+  font-size: 12px;
+  color: var(--cf-text-muted);
+}
+
+.cf-group-empty {
+  padding: 18px 0;
+  text-align: center;
+  color: var(--cf-text-muted);
+  font-size: 13px;
+}
+
+.cf-record {
+  border: 1px solid var(--cf-border);
+  border-radius: var(--cf-radius);
+  background: #fff;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+.cf-record-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--cf-text);
+}
+
+/* ---------- 控件 ---------- */
+
+.cf-unsupported {
+  color: var(--cf-text-muted);
+  font-size: 12px;
+  padding: 6px 0;
+}
+
+/* 选项网格（单选/多选） */
+.cf-option-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding-top: 5px;
+}
+
+.cf-option-desc {
+  display: block;
+  font-size: 12px;
+  color: var(--cf-text-muted);
+  margin-left: 22px;
+}
+
+/* 带单位数值 */
+.cf-unit-control {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+
+  .ant-select {
+    min-width: 72px;
+    width: auto;
+  }
+}
+
+/* 评分控件 */
+.cf-countable {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 4px;
+
+  .cf-countable-value {
+    font-weight: 600;
+    color: var(--cf-primary);
+  }
+}
+
+/* label 说明控件 */
+.cf-label-control {
+  width: 100%;
+  line-height: 22px;
+  word-break: break-all;
+}
+
+/* 上传 */
+.cf-upload {
+  width: 100%;
+
+  .cf-upload-name {
+    font-size: 12px;
+    color: var(--cf-text-muted);
+  }
+}
+
+/* ---------- 填报工作台 ---------- */
+
+.cf-workbench {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.cf-menu {
+  width: 240px;
+  flex-shrink: 0;
+  background: #fff;
+  border: 1px solid var(--cf-border);
+  border-radius: var(--cf-radius);
+  overflow: hidden;
+}
+
+.cf-menu-head {
+  padding: 12px 14px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--cf-border);
+}
+
+.cf-menu-list {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.cf-menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  padding: 11px 14px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font-size: 13px;
+  color: var(--cf-text);
+  border-left: 3px solid transparent;
+
+  &:hover {
+    background: #f5faff;
+  }
+
+  &.active {
+    background: #e8f1ff;
+    border-left-color: var(--cf-primary);
+    color: var(--cf-primary);
+    font-weight: 600;
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    color: var(--cf-text-muted);
+    background: #fafafa;
+  }
+}
+
+.cf-menu-item-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cf-main-panel {
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid var(--cf-border);
+  border-radius: var(--cf-radius);
+  padding: 20px 22px 24px;
+}
+
+.cf-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--cf-border);
+}
+
+.cf-panel-title {
+  margin: 0;
+}
+
+.cf-panel-desc {
+  margin: 0 0 14px;
+  color: var(--cf-text-muted);
+  font-size: 12px;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .cf-workbench {
+    flex-direction: column;
+  }
+
+  .cf-menu {
+    width: 100%;
+  }
+
+  .cf-form-item {
+    width: 100%;
+  }
+
+  .cf-form-label {
+    flex-basis: 96px;
+  }
+}
